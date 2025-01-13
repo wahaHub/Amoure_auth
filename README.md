@@ -36,6 +36,22 @@ The authentication flow is implemented using:
    - Creates/Updates user profile
    - Issues JWT token
 
+4. **Token Refresh**
+   - Client sends refresh token
+   - System validates refresh token
+   - Issues new access token and refresh token
+
+5. **Logout**
+   - User sends logout request with access token
+   - System invalidates all active sessions
+   - Revokes all tokens
+
+6. **Profile Deletion**
+   - User requests profile deletion
+   - System validates access token
+   - Removes all user data and sessions
+   - Permanently deletes the profile
+
 ## Setup Instructions
 1. Install and Configure Keycloak
    ```bash
@@ -114,9 +130,19 @@ The authentication flow is implemented using:
    ```
 
 ## API Endpoints
-- POST /api/auth/wechat
-- POST /api/auth/apple
-- POST /api/auth/phone/send-otp
-- POST /api/auth/phone/verify
-- POST /api/auth/refresh
-- POST /api/auth/logout 
+1. WeChat Authentication
+   - POST /api/auth/wechat
+
+2. Apple Sign-in
+   - POST /api/auth/apple
+
+3. Phone Authentication
+   - POST /api/auth/phone/send-code
+   - POST /api/auth/phone/verify
+
+4. Token Management
+   - POST /api/auth/refresh
+   - POST /api/auth/logout
+
+5. Profile Management
+   - DELETE /api/auth/profile 

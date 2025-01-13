@@ -10,10 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
 
 @Slf4j
 @Service
@@ -22,6 +18,10 @@ public class AppleAuthService {
     private final AppleProperties appleProperties;
     private final KeycloakService keycloakService;
     private final AppleJwtValidator jwtValidator;
+
+    Claims validateAppleToken(String identityToken) {
+        return jwtValidator.validateToken(identityToken);
+    }
 
     public AuthResponse handleAppleLogin(AppleLoginRequest request) {
         try {

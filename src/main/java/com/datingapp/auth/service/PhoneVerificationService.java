@@ -69,7 +69,7 @@ public class PhoneVerificationService {
         }
     }
 
-    public AuthResponse verifyCode(String phoneNumber, String code) {
+    public boolean verifyCode(String phoneNumber, String code) {
         String key = VERIFICATION_CODE_PREFIX + phoneNumber;
         String storedCode = redisTemplate.opsForValue().get(key);
 
@@ -85,8 +85,7 @@ public class PhoneVerificationService {
         // Delete the used code
         redisTemplate.delete(key);
 
-        // Create or authenticate user
-        return keycloakService.authenticatePhoneUser(phoneNumber);
+        return true;
     }
 
     private String generateVerificationCode() {

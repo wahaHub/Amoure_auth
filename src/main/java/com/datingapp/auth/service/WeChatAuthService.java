@@ -76,7 +76,7 @@ public class WeChatAuthService {
         }
     }
 
-    private JsonNode getWeChatAccessToken(String code) {
+    JsonNode getWeChatAccessToken(String code) {
         String url = String.format(WECHAT_ACCESS_TOKEN_URL,
             weChatProperties.getAppId(),
             weChatProperties.getAppSecret(),
@@ -94,7 +94,7 @@ public class WeChatAuthService {
         }
     }
 
-    private JsonNode getWeChatUserInfo(String accessToken, String openId) {
+    JsonNode getWeChatUserInfo(String accessToken, String openId) {
         String url = String.format(WECHAT_USER_INFO_URL, accessToken, openId);
 
         try {

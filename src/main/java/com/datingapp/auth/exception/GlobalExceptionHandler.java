@@ -52,4 +52,17 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(AccountLinkException.class)
+    public ResponseEntity<ErrorResponse> handleAccountLinkException(
+            AccountLinkException ex, HttpServletRequest request) {
+        log.error("Account linking error: ", ex);
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .message(ex.getMessage())
+                .errorCode(ex.getErrorCode())
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
 } 

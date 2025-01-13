@@ -3,7 +3,9 @@ package com.datingapp.auth.controller;
 import com.datingapp.auth.dto.AuthResponse;
 import com.datingapp.auth.dto.PhoneVerificationRequest;
 import com.datingapp.auth.dto.PhoneVerificationCodeRequest;
+import com.datingapp.auth.exception.AuthenticationException;
 import com.datingapp.auth.service.PhoneVerificationService;
+import com.datingapp.auth.service.KeycloakService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PhoneAuthController {
     private final PhoneVerificationService phoneVerificationService;
+    private final KeycloakService keycloakService;
 
     @PostMapping("/send-code")
     public ResponseEntity<Void> sendVerificationCode(
@@ -29,11 +32,21 @@ public class PhoneAuthController {
     public ResponseEntity<AuthResponse> verifyCode(
             @Valid @RequestBody PhoneVerificationCodeRequest request) {
         log.info("Verifying code for phone number");
-        AuthResponse response = phoneVerificationService.verifyCode(
+        
+        // First verify the code
+        boolean isVerified = phoneVerificationService.verifyCode(
             request.getPhoneNumber(), 
             request.getCode()
         );
-        log.info("Phone verification successful");
+        
+        if (!isVerified) {
+            throw new AuthenticationException("Code verification failed");
+        }
+        
+        // If verified, authenticate with Keycloak
+        AuthResponse response = keycloakService.authenticatePhoneUser(request.getPhoneNumber());
+        
+        log.info("Phone verification and authentication successful");
         return ResponseEntity.ok(response);
     }
 } 
