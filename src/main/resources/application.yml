@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dating-app-auth
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+
+keycloak:
+  auth-server-url: ${KEYCLOAK_URL:http://localhost:8180}
+  realm: ${KEYCLOAK_REALM:dating-app}
+  resource: ${KEYCLOAK_CLIENT_ID:dating-app-client}
+  credentials:
+    secret: ${KEYCLOAK_CLIENT_SECRET:your-client-secret}
+  public-client: false
+  bearer-only: true
+
+app:
+  auth:
+    wechat:
+      app-id: ${WECHAT_APP_ID}
+      app-secret: ${WECHAT_APP_SECRET}
+    apple:
+      team-id: ${APPLE_TEAM_ID}
+      key-id: ${APPLE_KEY_ID}
+      private-key: ${APPLE_PRIVATE_KEY}
+      client-id: ${APPLE_CLIENT_ID}
+      key-path: ${APPLE_KEY_PATH:/keys/AuthKey.p8}
+    jwt:
+      expiration: 3600000 
+
+alibaba:
+  cloud:
+    sms:
+      access-key-id: ${ALIBABA_ACCESS_KEY_ID}
+      access-key-secret: ${ALIBABA_ACCESS_KEY_SECRET}
+      sign-name: ${ALIBABA_SMS_SIGN_NAME}
+      template-code: ${ALIBABA_SMS_TEMPLATE_CODE}
+      endpoint: ${ALIBABA_SMS_ENDPOINT:dysmsapi.aliyuncs.com} 
